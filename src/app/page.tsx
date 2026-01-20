@@ -140,10 +140,10 @@ export default function Home() {
   }
 
   const eventDate = new Date()
-  eventDate.setDate(eventDate.getDate() + 25) // Set event date to 30 days from now
+  eventDate.setDate(eventDate.getDate() + 24) // Set event date to 30 days from now
 
   const ibadanEventDate = new Date()
-  ibadanEventDate.setDate(ibadanEventDate.getDate() + 26) // Ibadan event date
+  ibadanEventDate.setDate(ibadanEventDate.getDate() + 25) // Ibadan event date
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -378,7 +378,7 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="text-center py-4">
                   <div className="text-2xl font-bold text-white mb-2">
-                    Saturday, February 14, 2026
+                    Sunday, February 15, 2026
                   </div>
                   <div className="text-sm text-slate-400">Event Date</div>
                 </div>
