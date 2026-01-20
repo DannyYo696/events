@@ -100,7 +100,7 @@ export default function LagosPage() {
   }
 
   const eventDate = new Date()
-  eventDate.setDate(eventDate.getDate() + 25)
+  eventDate.setDate(eventDate.getDate() + 24)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
