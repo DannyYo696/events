@@ -99,8 +99,7 @@ export default function AkurePage() {
     }).format(date)
   }
 
-  const eventDate = new Date()
-  eventDate.setDate(eventDate.getDate() + 26)
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -150,7 +149,7 @@ export default function AkurePage() {
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm sm:text-base text-slate-300 mb-12">
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-purple-500" />
-              <span>{formatDate(eventDate)}</span>
+              <span>Sunday, February 15, 2026</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-purple-500" />
