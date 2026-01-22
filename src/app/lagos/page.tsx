@@ -99,8 +99,7 @@ export default function LagosPage() {
     }).format(date)
   }
 
-  const eventDate = new Date()
-  eventDate.setDate(eventDate.getDate() + 24)
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -150,7 +149,7 @@ export default function LagosPage() {
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm sm:text-base text-slate-300 mb-12">
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-rose-500" />
-              <span>{formatDate(eventDate)}</span>
+              <span>Friday, February 13, 2026</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-rose-500" />
