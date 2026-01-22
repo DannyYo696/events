@@ -139,11 +139,12 @@ export default function Home() {
     }).format(date)
   }
 
-  const eventDate = new Date()
-  eventDate.setDate(eventDate.getDate() + 22) // Set event date to 30 days from now
+  // Example: Lagos event – February 24, 2026
+const eventDate = new Date('2026-02-13T00:00:00');
 
-  const ibadanEventDate = new Date()
-  ibadanEventDate.setDate(ibadanEventDate.getDate() + 23) // Ibadan event date
+// Example: Ibadan event – March 25, 2026
+const ibadanEventDate = new Date('2026-02-14T00:00:00');
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
