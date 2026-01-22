@@ -213,9 +213,9 @@ export default function CheckoutPage() {
                       <span>Ticket Type</span>
                       <span className="text-white">{selectedTier.name}</span>
                     </div>
-                    <div className="flex justify-between text-sm text-slate-400">
+                    {/*<div className="flex justify-between text-sm text-slate-400">
                       <span>Quantity</span>
-                      <span className="text-white">{selectedTier.isGroup ? '5 tickets' : '1 ticket'}</span>
+                      <span className="text-white">{selectedTier.isGroup ? '5 tickets' : '1 ticket' }</span>
                     </div>
                     {selectedTier.isGroup && (
                       <div className="flex justify-between text-sm text-slate-400">
@@ -227,7 +227,7 @@ export default function CheckoutPage() {
                     <div className="flex justify-between text-lg font-bold">
                       <span className="text-white">Total</span>
                       <span className="text-rose-500">₦{selectedTier.price.toLocaleString()}</span>
-                    </div>
+                    </div>*/}
                   </div>
 
                   <div className="flex items-center gap-2 text-xs text-slate-500 mt-4">
