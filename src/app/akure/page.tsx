@@ -11,9 +11,9 @@ import { toast } from '@/hooks/use-toast'
 
 const TICKET_TIERS = [
   {
-    id: 'regularly',
-    name: 'Regular',
-    price: 10000,
+    id: 'regular',
+    name: 'I Go Love',
+    price: 5000,
     description: 'Standard access to event',
     features: [
       'Event entry',
@@ -26,25 +26,9 @@ const TICKET_TIERS = [
     borderColor: 'border-emerald-500'
   },
   {
-    id: 'couples',
-    name: 'Couples',
-    price: 15000,
-    description: 'Suitable for couples',
-    features: [
-      '2 tickets included',
-      'Group seating arrangement',
-      'Entry for you and your partner',
-      'Digital ticket delivery'
-    ],
-    icon: Users,
-    color: 'bg-purple-500',
-    borderColor: 'border-purple-500',
-    isGroup: true
-  },
-  {
-    id: 'vipakure',
-    name: 'VIP',
-    price: 50000,
+    id: 'vip',
+    name: 'LOVIP',
+    price: 30000,
     description: 'Premium experience with exclusive perks',
     features: [
       'Priority entrance',
@@ -59,10 +43,26 @@ const TICKET_TIERS = [
     borderColor: 'border-amber-500',
     popular: true
   },
-  
+  {
+    id: 'gang_of_5',
+    name: 'Love Gang (5)',
+    price: 20000,
+    description: 'Group package for 5 people',
+    features: [
+      '5 tickets included',
+      'Group seating arrangement',
+      'Entry for your entire squad',
+      'Discounted rate per person (₦4,000)',
+      'Digital ticket delivery'
+    ],
+    icon: Users,
+    color: 'bg-purple-500',
+    borderColor: 'border-purple-500',
+    isGroup: true
+  }
 ]
 
-export default function AkurePage() {
+export default function LagosPage() {
   const router = useRouter()
   const [selectedTier, setSelectedTier] = useState<string | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
@@ -77,17 +77,17 @@ export default function AkurePage() {
     const tierToStore = {
       ...tier,
       icon: tierId,
-      city: 'Akure'
+      city: 'Lagos'
     }
     localStorage.setItem('selectedTicketTier', JSON.stringify(tierToStore))
 
     toast({
       title: 'Ticket tier selected',
-      description: `You selected ${tier.name} ticket tier for Akure. Proceeding to checkout...`,
+      description: `You selected ${tier.name} ticket tier for Lagos. Proceeding to checkout...`,
     })
 
     // Redirect to checkout page
-    window.location.href = '/checkout?city=Akure'
+    window.location.href = '/checkout?city=lagos'
   }
 
   const formatDate = (date: Date) => {
@@ -130,34 +130,34 @@ export default function AkurePage() {
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         {/* Hero Section */}
         <section className="text-center mb-16 sm:mb-24">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
-            <Zap className="h-4 w-4 text-purple-500" />
-            <span className="text-sm font-semibold text-purple-500">Akure Edition • Limited Tickets Available</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-500/10 border border-rose-500/20 mb-6">
+            <Zap className="h-4 w-4 text-rose-500" />
+            <span className="text-sm font-semibold text-rose-500">Lagos Edition • Limited Tickets Available</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
             Nightflix Inc.
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 mt-2">
-              Akure Experience
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-purple-500 mt-2">
+              Lagos Experience
             </span>
           </h1>
 
           <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-8">
-            Experience the ultimate night of entertainment in the ancient city. Join us for an unforgettable event at Akure's premier venue!
+            Experience the ultimate night of entertainment in the heart of Lagos. Join us for an unforgettable event at the city's premier venue!
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm sm:text-base text-slate-300 mb-12">
             <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-purple-500" />
-              <span>Sunday, February 15, 2026</span>
+              <Calendar className="h-5 w-5 text-rose-500" />
+              <span>Friday, February 13, 2026</span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-purple-500" />
+              <Clock className="h-5 w-5 text-rose-500" />
               <span>5:00 PM</span>
             </div>
             <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-purple-500" />
-              <span>Akure, Nigeria</span>
+              <MapPin className="h-5 w-5 text-rose-500" />
+              <span>Lagos, Nigeria</span>
             </div>
           </div>
 
@@ -165,12 +165,12 @@ export default function AkurePage() {
           <Card className="max-w-2xl mx-auto mb-8 bg-slate-900/50 border-slate-800">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
-                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-purple-500/20 shrink-0">
-                  <Building2 className="h-6 w-6 text-purple-500" />
+                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-rose-500/20 shrink-0">
+                  <Building2 className="h-6 w-6 text-rose-500" />
                 </div>
                 <div className="flex-1 text-left">
-                  <h3 className="text-lg font-semibold text-white mb-2">Venue: Champion Playground, ALAGBAKA, Akure</h3>
-                  <p className="text-sm text-slate-400 mb-2">Akure, Ondo State</p>
+                  <h3 className="text-lg font-semibold text-white mb-2">Venue: Eridanspace, The Phillips Centre, Oluwalogbon House, Plot A , Obafemi Awolowo way, Alausa Ikeja</h3>
+                  <p className="text-sm text-slate-400 mb-2">Ikeja, Lagos</p>
                   
                 </div>
               </div>
@@ -180,9 +180,9 @@ export default function AkurePage() {
           <Button
             size="lg"
             onClick={() => document.getElementById('tickets')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-semibold px-8 py-6 text-lg shadow-lg shadow-purple-500/25"
+            className="bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-600 hover:to-purple-700 text-white font-semibold px-8 py-6 text-lg shadow-lg shadow-rose-500/25"
           >
-            Get Your Akure Tickets
+            Get Your Lagos Tickets
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </section>
@@ -190,8 +190,8 @@ export default function AkurePage() {
         {/* Ticket Tiers Section */}
         <section id="tickets" className="mb-16 sm:mb-24">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Choose Your Akure Experience</h2>
-            <p className="text-slate-400 text-lg">Select the perfect ticket tier for your Nightflix Akure experience</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Choose Your Lagos Experience</h2>
+            <p className="text-slate-400 text-lg">Select the perfect ticket tier for your Nightflix Lagos experience</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
@@ -229,7 +229,7 @@ export default function AkurePage() {
                       </div>
                       {tier.isGroup && (
                         <div className="text-sm text-slate-400">
-                          
+                          ₦{pricePerPerson.toLocaleString()} per person (5 tickets)
                         </div>
                       )}
                     </div>
@@ -268,42 +268,105 @@ export default function AkurePage() {
           </div>
         </section>
 
-        {/* Akure-Specific About Section */}
+        {/* Lagos-Specific About Section */}
         <section id="about" className="mb-16 sm:mb-24">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12">Why Nightflix Akure?</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12">Why Nightflix Lagos?</h2>
             <div className="grid md:grid-cols-2 gap-8">
               <Card className="bg-slate-900/50 border-slate-800">
                 <CardHeader>
-                  <Star className="h-12 w-12 text-purple-500 mb-4" />
-                  <CardTitle className="text-xl text-white">Cultural Fusion Experience</CardTitle>
+                  <Star className="h-12 w-12 text-rose-500 mb-4" />
+                  <CardTitle className="text-xl text-white">A-List Entertainment</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-slate-400">
-                    Experience a unique blend of traditional and contemporary entertainment. The Akure edition celebrates the rich cultural heritage of the ancient city.
+                    Experience top-tier performances from Nigeria's biggest artists and entertainers. The Lagos edition brings together the best in Afrobeat, hip-hop, and more.
                   </p>
                 </CardContent>
               </Card>
 
               <Card className="bg-slate-900/50 border-slate-800">
                 <CardHeader>
-                  <Users className="h-12 w-12 text-pink-500 mb-4" />
-                  <CardTitle className="text-xl text-white">Connect with Pacesetters</CardTitle>
+                  <Users className="h-12 w-12 text-purple-500 mb-4" />
+                  <CardTitle className="text-xl text-white">Connect with Lagos Elite</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-slate-400">
-                    Network with Akure's movers and shakers. From entrepreneurs to creatives, meet people who are shaping the city's future.
+                    Network with Lagos's most influential and ambitious individuals. Make connections that matter in Nigeria's business and entertainment capital.
                   </p>
                 </CardContent>
               </Card>
 
-              
+              <Card className="bg-slate-900/50 border-slate-800">
+                <CardHeader>
+                  <MapPin className="h-12 w-12 text-emerald-500 mb-4" />
+                  <CardTitle className="text-xl text-white">Prime Locations</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400">
+                    Thoughtfully curated spaces across cities, chosen for accessibility, ambience, and convenience. Each NightFlix experience is hosted in locations with easy access, ample parking, and reliable transport links.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-900/50 border-slate-800">
+                <CardHeader>
+                  <Ticket className="h-12 w-12 text-amber-500 mb-4" />
+                  <CardTitle className="text-xl text-white">Exclusive Access</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-400">
+                    VIP experiences, after-party access, and exclusive meet-and-greet opportunities with your favorite artists.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
 
         {/* Getting There Section */}
-        
+        <section id="getting-there" className="mb-12">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12">Getting There</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="bg-slate-900/50 border-slate-800">
+                <CardHeader>
+                  <Navigation className="h-8 w-8 text-rose-500 mb-3" />
+                  <CardTitle className="text-lg text-white">By Car</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-slate-400">
+                    Ample parking available at the venue. 15 minutes from Lekki, 20 minutes from Ikeja. Use Google Maps for GPS navigation.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-900/50 border-slate-800">
+                <CardHeader>
+                  <Users className="h-8 w-8 text-purple-500 mb-3" />
+                  <CardTitle className="text-lg text-white">Ride-Sharing</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-slate-400">
+                    Uber, Bolt, and Taxify drop-off points directly at the venue entrance. Recommended for hassle-free transportation.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-900/50 border-slate-800">
+                <CardHeader>
+                  <Building2 className="h-8 w-8 text-emerald-500 mb-3" />
+                  <CardTitle className="text-lg text-white">Public Transport</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-slate-400">
+                    BRT buses available to Victoria Island. Short 5-minute walk from the nearest bus stop to the venue.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
@@ -312,7 +375,7 @@ export default function AkurePage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <Ticket className="h-6 w-6 text-rose-500" />
-              <span className="text-lg font-bold text-white">Nightflix Akure</span>
+              <span className="text-lg font-bold text-white">Nightflix Lagos</span>
             </div>
             <p className="text-sm text-slate-400 text-center sm:text-left">
               © 2025 Nightflix. All rights reserved.
