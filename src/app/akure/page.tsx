@@ -11,9 +11,9 @@ import { toast } from '@/hooks/use-toast'
 
 const TICKET_TIERS = [
   {
-    id: 'regular',
-    name: 'I Go Love',
-    price: 5000,
+    id: 'REGULARLY',
+    name: 'Regular',
+    price: 10000,
     description: 'Standard access to event',
     features: [
       'Event entry',
@@ -27,8 +27,8 @@ const TICKET_TIERS = [
   },
   {
     id: 'vip',
-    name: 'LOVIP',
-    price: 30000,
+    name: 'Couples',
+    price: 15000,
     description: 'Premium experience with exclusive perks',
     features: [
       'Priority entrance',
@@ -45,7 +45,7 @@ const TICKET_TIERS = [
   },
   {
     id: 'gang_of_5',
-    name: 'Love Gang (5)',
+    name: 'VIP',
     price: 20000,
     description: 'Group package for 5 people',
     features: [
