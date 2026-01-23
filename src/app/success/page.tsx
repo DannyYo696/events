@@ -274,7 +274,7 @@ export default function SuccessPage() {
 
                   {/* Ticket Details */}
                   <div className="space-y-4">
-                    <div className="flex items-center gap-3">
+                    {/*<div className="flex items-center gap-3">
                       <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-rose-500/20 shrink-0">
                         <Calendar className="h-5 w-5 text-rose-500" />
                       </div>
@@ -292,7 +292,7 @@ export default function SuccessPage() {
                         <p className="text-xs text-slate-500">Venue</p>
                         <p className="text-sm font-semibold text-white">Lagos, Nigeria</p>
                       </div>
-                    </div>
+                    </div>*/}
 
                     <div className="flex items-center gap-3">
                       <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-purple-500/20 shrink-0">
@@ -408,10 +408,10 @@ export default function SuccessPage() {
                   </p>
                   <div className="space-y-2">
                     <p className="text-sm text-slate-400">
-                      <span className="font-semibold text-white">Email:</span> support@nightflix.com
+                      <span className="font-semibold text-white">Email:</span> nightflixinc@gmail.com
                     </p>
                     <p className="text-sm text-slate-400">
-                      <span className="font-semibold text-white">Phone:</span> +234 800 000 0000
+                      <span className="font-semibold text-white">Phone:</span> 08162974134
                     </p>
                   </div>
                 </CardContent>
