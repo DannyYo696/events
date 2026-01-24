@@ -41,6 +41,9 @@ model Ticket {
   buyerName      String
   buyerEmail     String
   buyerPhone     String
+  person2Name        String?
+  person2Email       String?
+  person2Phone       String?
   amount         Int
   paymentRef     String    @unique
   paymentStatus  PaymentStatus @default(PENDING)
@@ -54,6 +57,8 @@ model Ticket {
 enum TicketTier {
   REGULAR
   VIP
+  COUPLE
+  CUPS
   GANG_OF_5
   REGULARLY
   VIPAKURE
