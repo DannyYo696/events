@@ -6,7 +6,13 @@ const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY
 const RESEND_API_KEY = process.env.RESEND_API_KEY
 
 // Function to send ticket email using Resend
-async function sendTicketEmail(ticket: any): Promise<boolean> {
+async function sendTicketEmail(
+  ticket: any,
+  recipientEmail: string,
+  recipientName: string,
+  isCouples: boolean = false,
+  isSecondPerson: boolean = false
+): Promise<boolean> {
   if (!RESEND_API_KEY) {
     console.log('Resend API key not configured, skipping email')
     return false
@@ -15,10 +21,109 @@ async function sendTicketEmail(ticket: any): Promise<boolean> {
   try {
     const resend = new Resend(RESEND_API_KEY)
 
+    // Prepare attendee details based on whether it's couples ticket
+    let attendeeSection = ''
+    
+    if (isCouples) {
+      attendeeSection = `
+        <div class="ticket-card">
+          <h2 class="ticket-title">💑 Couples Ticket Details</h2>
+          <span class="badge">COUPLES TICKET</span>
+          
+          <div style="margin-top: 20px;">
+            <h3 style="color: #f43f5e; font-size: 16px; margin-bottom: 10px;">👤 Couple 1</h3>
+            <div class="detail-row">
+              <span class="detail-label">Name:</span>
+              <span class="detail-value">${ticket.buyerName}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email:</span>
+              <span class="detail-value">${ticket.buyerEmail}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Phone:</span>
+              <span class="detail-value">${ticket.buyerPhone}</span>
+            </div>
+
+            <h3 style="color: #f43f5e; font-size: 16px; margin: 20px 0 10px 0;">👤 Couple 2</h3>
+            <div class="detail-row">
+              <span class="detail-label">Name:</span>
+              <span class="detail-value">${ticket.person2Name}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email:</span>
+              <span class="detail-value">${ticket.person2Email}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Phone:</span>
+              <span class="detail-value">${ticket.person2Phone}</span>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #334155;">
+              <div class="detail-row">
+                <span class="detail-label">Quantity:</span>
+                <span class="detail-value">${ticket.quantity} ticket(s)</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Amount Paid:</span>
+                <span class="detail-value">₦${ticket.amount.toLocaleString()}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Payment Status:</span>
+                <span class="detail-value" style="color: #22c55e;">${ticket.paymentStatus}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    } else {
+      attendeeSection = `
+        <div class="ticket-card">
+          <h2 class="ticket-title">${ticket.tier.replace('_', ' ')} Ticket</h2>
+          <span class="badge">${ticket.tier.replace('_', ' ')}</span>
+          
+          <div style="margin-top: 20px;">
+            <div class="detail-row">
+              <span class="detail-label">Attendee Name:</span>
+              <span class="detail-value">${ticket.buyerName}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Email:</span>
+              <span class="detail-value">${ticket.buyerEmail}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Phone:</span>
+              <span class="detail-value">${ticket.buyerPhone}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Quantity:</span>
+              <span class="detail-value">${ticket.quantity} ticket(s)</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Amount Paid:</span>
+              <span class="detail-value">₦${ticket.amount.toLocaleString()}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Payment Status:</span>
+              <span class="detail-value" style="color: #22c55e;">${ticket.paymentStatus}</span>
+            </div>
+          </div>
+        </div>
+      `
+    }
+
+    const greeting = isCouples && isSecondPerson 
+      ? `Hi ${recipientName},<br><br>You and ${ticket.buyerName} are all set for Nightflix!`
+      : isCouples 
+        ? `Hi ${recipientName},<br><br>You and ${ticket.person2Name} are all set for Nightflix!`
+        : `Hi ${recipientName},`
+
     const data = await resend.emails.send({
       from: process.env.EMAIL_FROM || 'Nightflix <noreply@buynightflix.com>',
-      to: [ticket.buyerEmail],
-      subject: `Your Nightflix Ticket - ${ticket.tier.replace('_', ' ')}`,
+      to: [recipientEmail],
+      subject: isCouples 
+        ? `Your Nightflix Couples Ticket - ${ticket.ticketCode}`
+        : `Your Nightflix Ticket - ${ticket.tier.replace('_', ' ')}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -132,40 +237,13 @@ async function sendTicketEmail(ticket: any): Promise<boolean> {
               </div>
               <div class="content">
                 <p style="color: #94a3b8; margin-bottom: 20px;">
+                  ${greeting}
+                </p>
+                <p style="color: #94a3b8; margin-bottom: 20px;">
                   Thank you for purchasing your Nightflix ticket! Below are your ticket details.
                 </p>
                 
-                <div class="ticket-card">
-                  <h2 class="ticket-title">${ticket.tier.replace('_', ' ')} Ticket</h2>
-                  <span class="badge">${ticket.tier.replace('_', ' ')}</span>
-                  
-                  <div style="margin-top: 20px;">
-                    <div class="detail-row">
-                      <span class="detail-label">Attendee Name: </span>
-                      <span class="detail-value">${ticket.buyerName}</span>
-                    </div>
-                    <div class="detail-row">
-                      <span class="detail-label">Email: </span>
-                      <span class="detail-value">${ticket.buyerEmail}</span>
-                    </div>
-                    <div class="detail-row">
-                      <span class="detail-label">Phone: </span>
-                      <span class="detail-value">${ticket.buyerPhone}</span>
-                    </div>
-                    <div class="detail-row">
-                      <span class="detail-label">Quantity: </span>
-                      <span class="detail-value">${ticket.quantity} ticket(s)</span>
-                    </div>
-                    <div class="detail-row">
-                      <span class="detail-label">Amount Paid: </span>
-                      <span class="detail-value">₦${ticket.amount.toLocaleString()}</span>
-                    </div>
-                    <div class="detail-row">
-                      <span class="detail-label">Payment Status: </span>
-                      <span class="detail-value" style="color: #22c55e;">${ticket.paymentStatus}</span>
-                    </div>
-                  </div>
-                </div>
+                ${attendeeSection}
 
                 <div class="ticket-code">
                   <h3>TICKET CODE (Show at venue)</h3>
@@ -174,13 +252,16 @@ async function sendTicketEmail(ticket: any): Promise<boolean> {
 
                 <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 20px;">
                   <p style="margin: 0; color: #92400e; font-size: 14px;">
-                    <strong>Important:</strong> Please show this ticket with your ticket code at the venue entrance for verification. 
+                    <strong>Important:</strong> ${isCouples 
+                      ? 'Both attendees must show this ticket with the ticket code at the venue entrance for verification.' 
+                      : 'Please show this ticket with your ticket code at the venue entrance for verification.'
+                    } 
                     You can also show this email on your phone.
                   </p>
                 </div>
 
                 <p style="color: #94a3b8; margin-bottom: 15px;">
-                  Need help? Contact us at support@nightflix.com
+                  Need help? Contact us at nightflixinc@gmail.com or call 08162974134
                 </p>
 
                 <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.buynightflix.com'}/success?reference=${ticket.paymentRef}" class="cta-button">
@@ -197,7 +278,7 @@ async function sendTicketEmail(ticket: any): Promise<boolean> {
       `,
     })
 
-    console.log('Ticket email sent successfully via Resend to:', ticket.buyerEmail)
+    console.log('Ticket email sent successfully via Resend to:', recipientEmail)
     return true
   } catch (emailError) {
     console.error('Failed to send ticket email via Resend:', emailError)
@@ -234,6 +315,9 @@ export async function GET(request: NextRequest) {
 
     console.log('Found ticket:', ticket.id, 'Status:', ticket.paymentStatus)
 
+    // Check if it's a couples ticket
+    const isCouplesTicket = ticket.tier === 'COUPLE'
+
     // Update ticket status if it's still pending
     if (ticket.paymentStatus === 'PENDING') {
       console.log('Updating ticket status to COMPLETED')
@@ -246,8 +330,31 @@ export async function GET(request: NextRequest) {
         },
       })
 
-      // Send ticket email using Resend (only once)
-      const emailSent = await sendTicketEmail(updatedTicket)
+      let emailSent = false
+
+      // Send email to person 1 (buyer)
+      const email1Sent = await sendTicketEmail(
+        updatedTicket,
+        updatedTicket.buyerEmail,
+        updatedTicket.buyerName,
+        isCouplesTicket,
+        false
+      )
+
+      // If it's a couples ticket, send email to person 2 as well
+      if (isCouplesTicket && updatedTicket.person2Email && updatedTicket.person2Name) {
+        console.log('Sending email to person 2:', updatedTicket.person2Email)
+        const email2Sent = await sendTicketEmail(
+          updatedTicket,
+          updatedTicket.person2Email,
+          updatedTicket.person2Name,
+          isCouplesTicket,
+          true
+        )
+        emailSent = email1Sent && email2Sent
+      } else {
+        emailSent = email1Sent
+      }
 
       return NextResponse.json({
         success: true,
