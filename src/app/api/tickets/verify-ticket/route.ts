@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-// POST endpoint to verify a ticket at the venue
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -14,9 +13,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Find the ticket by ticket code
     const ticket = await db.ticket.findUnique({
-      where: { ticketCode },
+      where: { ticketCode: ticketCode.toUpperCase() },
     })
 
     if (!ticket) {
@@ -30,7 +28,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check payment status
     if (ticket.paymentStatus !== 'COMPLETED') {
       return NextResponse.json({
         success: false,
@@ -40,7 +37,6 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Check if already verified
     if (ticket.verificationStatus === 'VERIFIED') {
       return NextResponse.json({
         success: true,
@@ -53,13 +49,14 @@ export async function POST(request: NextRequest) {
           quantity: ticket.quantity,
           buyerName: ticket.buyerName,
           buyerEmail: ticket.buyerEmail,
+          person2Name: ticket.person2Name,
+          person2Email: ticket.person2Email,
           verificationStatus: ticket.verificationStatus,
           verifiedAt: ticket.updatedAt,
         },
       })
     }
 
-    // Update ticket verification status
     const updatedTicket = await db.ticket.update({
       where: { id: ticket.id },
       data: {
@@ -78,66 +75,14 @@ export async function POST(request: NextRequest) {
         quantity: updatedTicket.quantity,
         buyerName: updatedTicket.buyerName,
         buyerEmail: updatedTicket.buyerEmail,
+        person2Name: updatedTicket.person2Name,
+        person2Email: updatedTicket.person2Email,
         verificationStatus: updatedTicket.verificationStatus,
         verifiedAt: updatedTicket.updatedAt,
       },
     })
   } catch (error) {
     console.error('Ticket verification error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
-}
-
-// GET endpoint to check ticket status (for lookup)
-export async function GET(request: NextRequest) {
-  try {
-    const searchParams = request.nextUrl.searchParams
-    const ticketCode = searchParams.get('code')
-
-    if (!ticketCode) {
-      return NextResponse.json(
-        { error: 'Ticket code is required' },
-        { status: 400 }
-      )
-    }
-
-    // Find the ticket by ticket code
-    const ticket = await db.ticket.findUnique({
-      where: { ticketCode },
-    })
-
-    if (!ticket) {
-      return NextResponse.json(
-        { 
-          success: false,
-          error: 'Invalid ticket code',
-          status: 'INVALID'
-        },
-        { status: 404 }
-      )
-    }
-
-    return NextResponse.json({
-      success: true,
-      ticket: {
-        id: ticket.id,
-        ticketCode: ticket.ticketCode,
-        tier: ticket.tier,
-        quantity: ticket.quantity,
-        buyerName: ticket.buyerName,
-        buyerEmail: ticket.buyerEmail,
-        paymentStatus: ticket.paymentStatus,
-        verificationStatus: ticket.verificationStatus,
-        amount: ticket.amount,
-        createdAt: ticket.createdAt,
-        updatedAt: ticket.updatedAt,
-      },
-    })
-  } catch (error) {
-    console.error('Ticket lookup error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
