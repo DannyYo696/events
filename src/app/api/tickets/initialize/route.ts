@@ -7,6 +7,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://your-vercel-app.verc
 
 const TICKET_PRICES: Record<string, number> = {
   REGULAR: 5000,
+  COUPLE: 8000,
   VIP: 30000,
   GANG_OF_5: 20000,
   REGULARLY: 10000,
@@ -16,17 +17,19 @@ const TICKET_PRICES: Record<string, number> = {
 
 const TICKET_QUANTITIES: Record<string, number> = {
   REGULAR: 1,
+  COUPLE: 2,
   VIP: 1,
   GANG_OF_5: 5,
   REGULARLY: 1,
   VIPAKURE: 1,
+  CUPS: 2,
   COUPLES: 2,
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, phone, tier, amount } = body
+    const { name, email, phone, tier, amount, person2 } = body
 
     if (!name || !email || !phone || !tier || !amount) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -41,25 +44,62 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid amount for selected tier' }, { status: 400 })
     }
 
+    // For couples tickets, validate person2 data
+    if (tier === 'COUPLE' && (!person2 || !person2.name || !person2.email || !person2.phone)) {
+      return NextResponse.json({ error: 'Missing second person details for Couples ticket' }, { status: 400 })
+    }
+
     const ticketCode = `NF-${tier.substring(0, 3)}-${uuidv4().substring(0, 8).toUpperCase()}`
     const paymentRef = uuidv4()
 
     // Create ticket in DB
+    const ticketData: any = {
+      ticketCode,
+      qrCode: ticketCode,
+      tier,
+      quantity: TICKET_QUANTITIES[tier],
+      buyerName: name,
+      buyerEmail: email,
+      buyerPhone: phone,
+      amount,
+      paymentRef,
+      paymentStatus: 'PENDING',
+      verificationStatus: 'NOT_VERIFIED',
+    }
+
+    // Add person2 data if it's a couples ticket
+    if (tier === 'COUPLE' && person2) {
+      ticketData.person2Name = person2.name
+      ticketData.person2Email = person2.email
+      ticketData.person2Phone = person2.phone
+    }
+
     const ticket = await db.ticket.create({
-      data: {
-        ticketCode,
-        qrCode: ticketCode,
-        tier,
-        quantity: TICKET_QUANTITIES[tier],
-        buyerName: name,
-        buyerEmail: email,
-        buyerPhone: phone,
-        amount,
-        paymentRef,
-        paymentStatus: 'PENDING',
-        verificationStatus: 'NOT_VERIFIED',
-      },
+      data: ticketData,
     })
+
+    // Build metadata for Paystack
+    const metadata: any = {
+      ticketId: ticket.id,
+      ticketCode,
+      tier,
+      name,
+      phone,
+      custom_fields: [
+        { display_name: 'Ticket Code', variable_name: 'ticket_code', value: ticketCode },
+      ],
+    }
+
+    // Add person2 to metadata if couples ticket
+    if (tier === 'COUPLE' && person2) {
+      metadata.person2Name = person2.name
+      metadata.person2Email = person2.email
+      metadata.person2Phone = person2.phone
+      metadata.custom_fields.push(
+        { display_name: 'Person 2 Name', variable_name: 'person2_name', value: person2.name },
+        { display_name: 'Person 2 Email', variable_name: 'person2_email', value: person2.email }
+      )
+    }
 
     // Initialize Paystack payment
     const response = await fetch('https://api.paystack.co/transaction/initialize', {
@@ -72,16 +112,7 @@ export async function POST(request: NextRequest) {
         email,
         amount: amount * 100, // kobo
         reference: paymentRef,
-        metadata: {
-          ticketId: ticket.id,
-          ticketCode,
-          tier,
-          name,
-          phone,
-          custom_fields: [
-            { display_name: 'Ticket Code', variable_name: 'ticket_code', value: ticketCode },
-          ],
-        },
+        metadata,
         callback_url: `${APP_URL}/success`,
       }),
     })
