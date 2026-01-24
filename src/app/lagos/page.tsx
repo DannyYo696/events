@@ -26,6 +26,21 @@ const TICKET_TIERS = [
     borderColor: 'border-emerald-500'
   },
   {
+    id: 'couple',
+    name: 'Couples',
+    price: 8000,
+    description: 'Standard access to event',
+    features: [
+      'Covers for You & Yours',
+      'Event entry',
+      'Access to main venue',
+      'Digital ticket delivery'
+    ],
+    icon: Ticket,
+    color: 'bg-emerald-500',
+    borderColor: 'border-emerald-500'
+  },
+  {
     id: 'vip',
     name: 'LOVIP',
     price: 30000,
