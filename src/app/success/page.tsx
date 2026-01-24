@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { CheckCircle2, Mail, Download, QrCode, Ticket, Calendar, MapPin, Clock, Home, Share2, AlertTriangle } from 'lucide-react'
+import { CheckCircle2, Mail, Download, QrCode, Ticket, Calendar, MapPin, Clock, Home, Share2, AlertTriangle, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -19,6 +19,9 @@ interface TicketData {
   buyerName: string
   buyerEmail: string
   buyerPhone: string
+  person2Name?: string
+  person2Email?: string
+  person2Phone?: string
   amount: number
   paymentRef: string
   paymentStatus: string
@@ -118,7 +121,6 @@ export default function SuccessPage() {
         console.log('Share failed:', error)
       }
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(window.location.href)
       toast({
         title: 'Link Copied',
@@ -188,10 +190,13 @@ export default function SuccessPage() {
     return null
   }
 
+  const isCouplesTicket = ticketData.tier === 'COUPLE'
+
   const tierColors: Record<string, { bg: string; text: string; border: string }> = {
     REGULAR: { bg: 'bg-emerald-500/10', text: 'text-emerald-500', border: 'border-emerald-500/30' },
     VIP: { bg: 'bg-amber-500/10', text: 'text-amber-500', border: 'border-amber-500/30' },
     GANG_OF_5: { bg: 'bg-purple-500/10', text: 'text-purple-500', border: 'border-purple-500/30' },
+    COUPLE: { bg: 'bg-rose-500/10', text: 'text-rose-500', border: 'border-rose-500/30' },
   }
 
   const colors = tierColors[ticketData.tier] || tierColors.REGULAR
@@ -227,13 +232,25 @@ export default function SuccessPage() {
               <CheckCircle2 className="h-10 w-10 text-emerald-500" />
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">Payment Successful!</h1>
-            <p className="text-slate-400 text-lg mb-2">Your ticket has been purchased successfully</p>
+            <p className="text-slate-400 text-lg mb-2">
+              {isCouplesTicket ? 'Your couples tickets have been purchased successfully' : 'Your ticket has been purchased successfully'}
+            </p>
             {emailSent && (
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                <Mail className="h-4 w-4 text-emerald-500" />
-                <span className="text-sm font-semibold text-emerald-500">
-                  Ticket details sent to {ticketData.buyerEmail}
-                </span>
+              <div className="flex flex-col items-center gap-2">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                  <Mail className="h-4 w-4 text-emerald-500" />
+                  <span className="text-sm font-semibold text-emerald-500">
+                    Ticket details sent to {ticketData.buyerEmail}
+                  </span>
+                </div>
+                {isCouplesTicket && ticketData.person2Email && (
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                    <Mail className="h-4 w-4 text-emerald-500" />
+                    <span className="text-sm font-semibold text-emerald-500">
+                      Ticket details sent to {ticketData.person2Email}
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -248,9 +265,15 @@ export default function SuccessPage() {
                       <Badge className={`${colors.bg} ${colors.text} border-0 mb-2`}>
                         {ticketData.tier.replace('_', ' ')}
                       </Badge>
-                      <CardTitle className="text-xl sm:text-2xl text-white">Nightflix Ticket</CardTitle>
+                      <CardTitle className="text-xl sm:text-2xl text-white">
+                        {isCouplesTicket ? 'Nightflix Couples Ticket' : 'Nightflix Ticket'}
+                      </CardTitle>
                     </div>
-                    <Ticket className={`h-8 w-8 ${colors.text}`} />
+                    {isCouplesTicket ? (
+                      <Heart className={`h-8 w-8 ${colors.text}`} />
+                    ) : (
+                      <Ticket className={`h-8 w-8 ${colors.text}`} />
+                    )}
                   </div>
                 </CardHeader>
 
@@ -274,26 +297,6 @@ export default function SuccessPage() {
 
                   {/* Ticket Details */}
                   <div className="space-y-4">
-                    {/*<div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-rose-500/20 shrink-0">
-                        <Calendar className="h-5 w-5 text-rose-500" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500">Date & Time</p>
-                        <p className="text-sm font-semibold text-white">TBD (Check email)</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-500/20 shrink-0">
-                        <MapPin className="h-5 w-5 text-emerald-500" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500">Venue</p>
-                        <p className="text-sm font-semibold text-white">Lagos, Nigeria</p>
-                      </div>
-                    </div>*/}
-
                     <div className="flex items-center gap-3">
                       <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-purple-500/20 shrink-0">
                         <Ticket className="h-5 w-5 text-purple-500" />
@@ -321,20 +324,58 @@ export default function SuccessPage() {
                   <Separator className="bg-slate-700" />
 
                   {/* Buyer Details */}
-                  <div className="space-y-2">
-                    <p className="text-xs text-slate-500 font-semibold">ATTENDEE INFORMATION</p>
-                    <div>
-                      <p className="text-sm text-slate-400">Name</p>
-                      <p className="text-base font-semibold text-white">{ticketData.buyerName}</p>
+                  <div className="space-y-3">
+                    <p className="text-xs text-slate-500 font-semibold">
+                      {isCouplesTicket ? 'ATTENDEES INFORMATION' : 'ATTENDEE INFORMATION'}
+                    </p>
+                    
+                    {/* Person 1 */}
+                    <div className={isCouplesTicket ? 'p-3 rounded-lg bg-slate-800/50 border border-slate-700' : ''}>
+                      {isCouplesTicket && (
+                        <div className="flex items-center gap-2 mb-2">
+                          <Heart className="h-4 w-4 text-rose-500" />
+                          <p className="text-xs text-rose-500 font-semibold">COUPLE 1</p>
+                        </div>
+                      )}
+                      <div className="space-y-2">
+                        <div>
+                          <p className="text-sm text-slate-400">Name</p>
+                          <p className="text-base font-semibold text-white">{ticketData.buyerName}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-slate-400">Email</p>
+                          <p className="text-base font-semibold text-white">{ticketData.buyerEmail}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-slate-400">Phone</p>
+                          <p className="text-base font-semibold text-white">{ticketData.buyerPhone}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm text-slate-400">Email</p>
-                      <p className="text-base font-semibold text-white">{ticketData.buyerEmail}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-400">Phone</p>
-                      <p className="text-base font-semibold text-white">{ticketData.buyerPhone}</p>
-                    </div>
+
+                    {/* Person 2 - Only show for couples tickets */}
+                    {isCouplesTicket && ticketData.person2Name && (
+                      <div className="p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Heart className="h-4 w-4 text-rose-500" />
+                          <p className="text-xs text-rose-500 font-semibold">COUPLE 2</p>
+                        </div>
+                        <div className="space-y-2">
+                          <div>
+                            <p className="text-sm text-slate-400">Name</p>
+                            <p className="text-base font-semibold text-white">{ticketData.person2Name}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-slate-400">Email</p>
+                            <p className="text-base font-semibold text-white">{ticketData.person2Email}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-slate-400">Phone</p>
+                            <p className="text-base font-semibold text-white">{ticketData.person2Phone}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <Separator className="bg-slate-700" />
@@ -372,7 +413,10 @@ export default function SuccessPage() {
                     <div className="flex items-start gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
                       <p className="text-sm text-slate-300">
-                        Show this ticket with the QR code at the venue entrance for verification
+                        {isCouplesTicket 
+                          ? 'Both attendees must show this ticket with the QR code at the venue entrance for verification'
+                          : 'Show this ticket with the QR code at the venue entrance for verification'
+                        }
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
@@ -384,7 +428,10 @@ export default function SuccessPage() {
                     <div className="flex items-start gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
                       <p className="text-sm text-slate-300">
-                        A copy of your ticket has been sent to your email address
+                        {isCouplesTicket
+                          ? 'A copy of the ticket has been sent to both email addresses'
+                          : 'A copy of your ticket has been sent to your email address'
+                        }
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
