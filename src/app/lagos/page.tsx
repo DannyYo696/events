@@ -13,7 +13,7 @@ const TICKET_TIERS = [
   {
     id: 'regular',
     name: 'I Go Love',
-    price: 5000,
+    price: 3000,
     description: 'Standard access to event',
     features: [
       'Event entry',
@@ -28,7 +28,7 @@ const TICKET_TIERS = [
   {
     id: 'couple',
     name: 'Couples',
-    price: 8000,
+    price: 5000,
     description: 'Standard access to event',
     features: [
       'Covers for You & Yours',
@@ -43,7 +43,7 @@ const TICKET_TIERS = [
   {
     id: 'vip',
     name: 'LOVIP',
-    price: 30000,
+    price: 25000,
     description: 'Premium experience with exclusive perks',
     features: [
       'Priority entrance',
@@ -58,23 +58,6 @@ const TICKET_TIERS = [
     borderColor: 'border-amber-500',
     popular: true
   },
-  {
-    id: 'gang_of_5',
-    name: 'Love Gang (5)',
-    price: 20000,
-    description: 'Group package for 5 people',
-    features: [
-      '5 tickets included',
-      'Group seating arrangement',
-      'Entry for your entire squad',
-      'Discounted rate per person (₦4,000)',
-      'Digital ticket delivery'
-    ],
-    icon: Users,
-    color: 'bg-purple-500',
-    borderColor: 'border-purple-500',
-    isGroup: true
-  }
 ]
 
 export default function LagosPage() {
