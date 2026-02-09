@@ -6,9 +6,9 @@ const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://your-vercel-app.vercel.app'
 
 const TICKET_PRICES: Record<string, number> = {
-  REGULAR: 5000,
-  COUPLE: 8000,
-  VIP: 30000,
+  REGULAR: 3000,
+  COUPLE: 5000,
+  VIP: 25000,
   GANG_OF_5: 20000,
   REGULARLY: 10000,
   VIPAKURE: 50000,
