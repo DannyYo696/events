@@ -12,8 +12,8 @@ import { toast } from '@/hooks/use-toast'
 const TICKET_TIERS = [
   {
     id: 'regular',
-    name: 'Regular',
-    price: 5000,
+    name: 'I Go Love',
+    price: 3000,
     description: 'Standard access to event',
     features: [
       'Event entry',
@@ -26,9 +26,24 @@ const TICKET_TIERS = [
     borderColor: 'border-emerald-500'
   },
   {
+    id: 'couple',
+    name: 'Couples',
+    price: 5000,
+    description: 'Standard access to event',
+    features: [
+      'Covers for You & Yours',
+      'Event entry',
+      'Access to main venue',
+      'Digital ticket delivery'
+    ],
+    icon: Ticket,
+    color: 'bg-emerald-500',
+    borderColor: 'border-emerald-500'
+  },
+  {
     id: 'vip',
-    name: 'VIP',
-    price: 30000,
+    name: 'LOVIP',
+    price: 25000,
     description: 'Premium experience with exclusive perks',
     features: [
       'Priority entrance',
@@ -43,23 +58,6 @@ const TICKET_TIERS = [
     borderColor: 'border-amber-500',
     popular: true
   },
-  {
-    id: 'gang_of_5',
-    name: 'Gang of 5',
-    price: 20000,
-    description: 'Group package for 5 people',
-    features: [
-      '5 tickets included',
-      'Group seating arrangement',
-      'Entry for your entire squad',
-      'Discounted rate per person (₦4,000)',
-      'Digital ticket delivery'
-    ],
-    icon: Users,
-    color: 'bg-purple-500',
-    borderColor: 'border-purple-500',
-    isGroup: true
-  }
 ]
 
 export default function IbadanPage() {
