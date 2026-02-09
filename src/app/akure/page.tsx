@@ -11,9 +11,9 @@ import { toast } from '@/hooks/use-toast'
 
 const TICKET_TIERS = [
   {
-    id: 'regularly',
-    name: 'Regular',
-    price: 10000,
+    id: 'regular',
+    name: 'I Go Love',
+    price: 3000,
     description: 'Standard access to event',
     features: [
       'Event entry',
@@ -26,25 +26,24 @@ const TICKET_TIERS = [
     borderColor: 'border-emerald-500'
   },
   {
-    id: 'couples',
+    id: 'couple',
     name: 'Couples',
-    price: 15000,
-    description: 'Suitable for couples',
+    price: 5000,
+    description: 'Standard access to event',
     features: [
-      '2 tickets included',
-      'Group seating arrangement',
-      'Entry for you and your partner',
+      'Covers for You & Yours',
+      'Event entry',
+      'Access to main venue',
       'Digital ticket delivery'
     ],
-    icon: Users,
-    color: 'bg-purple-500',
-    borderColor: 'border-purple-500',
-    isGroup: true
+    icon: Ticket,
+    color: 'bg-emerald-500',
+    borderColor: 'border-emerald-500'
   },
   {
-    id: 'vipakure',
-    name: 'VIP',
-    price: 50000,
+    id: 'vip',
+    name: 'LOVIP',
+    price: 25000,
     description: 'Premium experience with exclusive perks',
     features: [
       'Priority entrance',
